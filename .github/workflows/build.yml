@@ -72,3 +72,22 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
+
+      # Install Ansible and run the playbook
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+           # Configure SSH and Run Ansible playbook
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Run Ansible playbook to deploy Helm chart
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: 'False'  # Optional: skips host key checking for SSH
+        run: |
+          ansible-playbook -i ansible/inventory.yml ansible/playbooks/deploy-app.yml
