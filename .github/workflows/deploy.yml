@@ -1,0 +1,36 @@
+name: Deploy
+
+on:
+  push:
+    branches: 
+      - "**"
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      # Install Ansible and run the playbook
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      - name: Run Ansible playbook to deploy Helm chart
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: 'False'  # Optional: skips host key checking for SSH
+        run: |
+          ansible-playbook -i ansible/inventory.yml ansible/playbooks/deploy-app.yml
+        
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}

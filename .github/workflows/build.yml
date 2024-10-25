@@ -47,7 +47,7 @@ jobs:
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          # generate Docker tags based on the following events/attributes
+          # TODO. use semver !!!!!
           tags: |
             type=raw,value=latest
             type=sha
