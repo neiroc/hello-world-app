@@ -1,0 +1,8 @@
+# Ansible Requirements
+
+---
+collections:
+  - name: community.kubernetes
+  - name: community.general
+  - name: ansible.posix
+
