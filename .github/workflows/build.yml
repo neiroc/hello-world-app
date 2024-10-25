@@ -6,9 +6,8 @@ on:
       - "**"
 
 env:
-  REGISTRY: ghcr.io/${{ github.repository_owner }}
-  IMAGE_NAME: hello-world-app
-  #IMAGE_NAME: ${{ github.repository }}
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build:
