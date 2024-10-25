@@ -27,13 +27,19 @@ jobs:
       - name: Run tests
         run: go test ./...
 
-      # - name: Build Docker image
-      #   run: |
-      #     docker build -t myusername/hello-world-app:latest .
+      - name: Scan Docker image for vulnerabilities
+        run: |
+          docker run --rm aquasec/trivy:latest image --exit-code 1 --severity HIGH,CRITICAL neiroc/hello-world-app:latest
 
-      # - name: Log in to Docker Hub
-      #   run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Tag Docker image
+        run: |
+          docker tag neiroc/hello-world-app:latest neiroc/hello-world-app:${{ github.sha }}
 
-      # - name: Push Docker image
-      #   run: docker push neiroc/hello-world-app:latest
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u neiroc --password-stdin
+
+      - name: Push Docker image to GitHub Container Registry
+        run: |
+          docker push neiroc/hello-world-app:latest
+          docker push neiroc/hello-world-app:${{ github.sha }}
 
