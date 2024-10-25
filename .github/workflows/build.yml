@@ -90,4 +90,5 @@ jobs:
         env:
           ANSIBLE_HOST_KEY_CHECKING: 'False'  # Optional: skips host key checking for SSH
         run: |
+          ansible-galaxy install -r ansible/requirements.yml 
           ansible-playbook -i ansible/inventory.yml ansible/playbooks/deploy-app.yml
