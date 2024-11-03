@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: {{ include "hello-world-app.name" . }}
+        date: "{{ now | unixEpoch }}"
     spec:
       containers:
       - name: {{ .Chart.Name }}

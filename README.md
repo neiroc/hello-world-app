@@ -8,6 +8,9 @@ Per il provisioning delle VM  è stato scelto `Terraform` e  `Google Cloud` come
 È stata inserita in maniera automatica la chiave rsa pubblica `cubbit.pub` su ognuna delle VM per un accesso `ssh` veloce, semplificato e sicuro.
 
 
+```sh
+docker run -p 8080:8080 ghcr.io/neiroc/hello-world-app
+```
 --- 
 
 ## Come utilizzare questo progetto
