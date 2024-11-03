@@ -85,6 +85,7 @@ jobs:
           mkdir -p ~/.kube
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
+          kubectl config use-context k3s-ansible 
         env:
           KUBECONFIG: ~/.kube/config
 
