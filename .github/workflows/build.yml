@@ -34,7 +34,6 @@ jobs:
       - name: Run static analysis
         run: go vet ./...
 
-      
       # - name: Run Semantic Release
       #   id: semantic_release
       #   run: npx semantic-release
@@ -80,21 +79,34 @@ jobs:
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
 
-      # Install Ansible and run the playbook
-      - name: Install Ansible
+      # Setup Kubeconfig for Kubernetes access
+      - name: Set up kubeconfig
         run: |
-          sudo apt update
-          sudo apt install -y ansible
-           # Configure SSH and Run Ansible playbook
-
-      - name: Configure SSH
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > cubbit.key
-          chmod 600 cubbit.key
-
-      - name: Run Ansible playbook to deploy Helm chart
+          echo "${{ secrets.KUBE_CONFIG_DATA }}" > ~/.kube/config
         env:
-          ANSIBLE_HOST_KEY_CHECKING: 'False'  # Optional: skips host key checking for SSH
+          KUBECONFIG: ~/.kube/config
+
+      # Install or upgrade Helm release in Kubernetes
+      - name: Install or Upgrade Helm release
         run: |
-          ansible-galaxy install -r ansible/requirements.yml 
-          ansible-playbook -i ansible/inventory.yml ansible/playbooks/deploy-app.yml
+          helm upgrade --install hello-world-app helm/hello-world-app
+
+
+      # # Install Ansible and run the playbook
+      # - name: Install Ansible
+      #   run: |
+      #     sudo apt update
+      #     sudo apt install -y ansible
+      #      # Configure SSH and Run Ansible playbook
+
+      # - name: Configure SSH
+      #   run: |
+      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > cubbit.key
+      #     chmod 600 cubbit.key
+
+      # - name: Run Ansible playbook to deploy Helm chart
+      #   env:
+      #     ANSIBLE_HOST_KEY_CHECKING: 'False'  # Optional: skips host key checking for SSH
+      #   run: |
+      #     ansible-galaxy install -r ansible/requirements.yml 
+      #     ansible-playbook -i ansible/inventory.yml ansible/playbooks/deploy-app.yml
