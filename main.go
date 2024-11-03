@@ -3,10 +3,12 @@ package main
 import (
     "fmt"
     "net/http"
+    "os"
 )
 
 func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "Hello, World! This is a test. Number 5")
+    secretValue := os.Getenv("API_KEY")
+    fmt.Fprintf(w, "Hello, World! Secret value is: %s", secretValue)
 }
 
 func main() {

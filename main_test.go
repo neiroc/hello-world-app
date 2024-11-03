@@ -18,7 +18,7 @@ func TestHelloWorldHandler(t *testing.T) {
     }
     // Check body content
     body, _ := io.ReadAll(res.Body)
-    if string(body) != "Hello, World! This is a test. Number 5" {
+    if string(body) != "Hello, World! Secret value is: N3X29CN3792NX2372" {
         t.Errorf("expected body 'Hello, World!'; got '%s'", string(body))
     }
 }

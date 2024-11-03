@@ -20,6 +20,12 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
+        env:
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: my-secret            # Name of the Kubernetes Secret
+              key: SECRET_KEY       # Key within the secret
         resources:
           limits:
             memory: "128Mi"
