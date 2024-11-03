@@ -93,22 +93,3 @@ jobs:
         run: |
           kubectl config use-context k3s-ansible 
           helm upgrade --install hello-world-app helm/hello-world-app --kubeconfig ~/.kube/config
-
-      # # Install Ansible and run the playbook
-      # - name: Install Ansible
-      #   run: |
-      #     sudo apt update
-      #     sudo apt install -y ansible
-      #      # Configure SSH and Run Ansible playbook
-
-      # - name: Configure SSH
-      #   run: |
-      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > cubbit.key
-      #     chmod 600 cubbit.key
-
-      # - name: Run Ansible playbook to deploy Helm chart
-      #   env:
-      #     ANSIBLE_HOST_KEY_CHECKING: 'False'  # Optional: skips host key checking for SSH
-      #   run: |
-      #     ansible-galaxy install -r ansible/requirements.yml 
-      #     ansible-playbook -i ansible/inventory.yml ansible/playbooks/deploy-app.yml
