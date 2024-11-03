@@ -84,6 +84,7 @@ jobs:
         run: |
           mkdir -p ~/.kube
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > ~/.kube/config
+          cat ~/.kube/config
         env:
           KUBECONFIG: ~/.kube/config
 
