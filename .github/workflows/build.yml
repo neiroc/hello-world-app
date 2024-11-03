@@ -85,13 +85,13 @@ jobs:
           mkdir -p ~/.kube
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
-          kubectl config use-context k3s-ansible 
         env:
           KUBECONFIG: ~/.kube/config
 
       # Install or upgrade Helm release in Kubernetes
       - name: Install or Upgrade Helm release
         run: |
+          kubectl config use-context k3s-ansible 
           helm upgrade --install hello-world-app helm/hello-world-app --kubeconfig ~/.kube/config
 
       # # Install Ansible and run the playbook
