@@ -82,6 +82,7 @@ jobs:
       # Setup Kubeconfig for Kubernetes access
       - name: Set up kubeconfig
         run: |
+          mkdir -p ~/.kube
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > ~/.kube/config
         env:
           KUBECONFIG: ~/.kube/config
