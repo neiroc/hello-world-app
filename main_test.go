@@ -1,24 +1,38 @@
 package main
 
 import (
-    "io" // Import the io package
     "net/http"
     "net/http/httptest"
+    "os"
     "testing"
 )
 
 func TestHelloWorldHandler(t *testing.T) {
-    req := httptest.NewRequest("GET", "/", nil)
-    w := httptest.NewRecorder()
-    helloWorldHandler(w, req)
+    // Set the environment variable for the test
+    os.Setenv("API_KEY", "test_secret_value")
+    defer os.Unsetenv("API_KEY") // Clean up after the test
 
-    res := w.Result()
-    if res.StatusCode != http.StatusOK {
-        t.Errorf("expected status OK; got %v", res.Status)
+    // Create a request to pass to the handler
+    req, err := http.NewRequest("GET", "/", nil)
+    if err != nil {
+        t.Fatal(err)
     }
-    // Check body content
-    body, _ := io.ReadAll(res.Body)
-    if string(body) != "Hello, World! Secret value is: N3X29CN3792NX2372" {
-        t.Errorf("expected body 'Hello, World!'; got '%s'", string(body))
+
+    // Record the response
+    rr := httptest.NewRecorder()
+    handler := http.HandlerFunc(helloWorldHandler)
+
+    // Serve the request
+    handler.ServeHTTP(rr, req)
+
+    // Check the status code
+    if status := rr.Code; status != http.StatusOK {
+        t.Errorf("Handler returned wrong status code: got %v want %v", status, http.StatusOK)
+    }
+
+    // Check the response body
+    expected := "Hello, World! Secret value is: test_secret_value"
+    if rr.Body.String() != expected {
+        t.Errorf("Handler returned unexpected body: got %v want %v", rr.Body.String(), expected)
     }
 }
