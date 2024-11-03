@@ -1,6 +1,6 @@
 # challenge-cubbit
 
-[Read the Challenge]()
+[Read the Challenge](./DevOps-Cubbit-Task.pdf)
 
 
 Per il provisioning delle VM  è stato scelto `Terraform` e  `Google Cloud` come provider. 

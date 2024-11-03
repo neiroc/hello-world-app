@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
       - name: hello-world-app
-        image: <your-dockerhub-username>/hello-world-app:latest
+        image: ghcr.io/neiroc/hello-world-app:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         resources:
