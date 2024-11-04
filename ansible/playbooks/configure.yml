@@ -1,0 +1,32 @@
+- name: Configure all VM
+  hosts: k3s_cluster
+  become: yes  
+  
+  tasks:
+
+    - name: Run apt update
+      apt:
+        update_cache: yes
+
+    - name: Remove swapfile from /etc/fstab
+      mount:
+        name: "{{ item }}"
+        fstype: swap
+        state: absent
+      with_items:
+        - swap
+        - none
+
+    - name: Disable swap
+      command: swapoff -a
+      when: ansible_swaptotal_mb > 0
+
+
+# - name: Install containerd
+#   hosts: all
+#   become: true
+#   vars:
+#     # Only use with containerd_config_default_write: true
+#     containerd_config_cgroup_driver_systemd: true
+#   roles:
+#     - geerlingguy.containerd # it will install docker as well

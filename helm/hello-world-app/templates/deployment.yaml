@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "hello-world-app.fullname" . }}
+  labels:
+    app: {{ include "hello-world-app.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "hello-world-app.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "hello-world-app.name" . }}
+        date: "{{ now | unixEpoch }}"
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: Always 
+        ports:
+        - containerPort: 8080
+        env:
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: my-secret            # Name of the Kubernetes Secret
+              key: SECRET_KEY       # Key within the secret
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
