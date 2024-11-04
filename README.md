@@ -6,7 +6,7 @@
 
 - Infrastructure as Code: `Terraform`
 - Cloud Provider: `Google Cloud`
-- k3s installation: `Ansible`
+- k3s installation: `Ansible` [Reference](https://github.com/k3s-io/k3s-ansible)
 
 --- 
 
