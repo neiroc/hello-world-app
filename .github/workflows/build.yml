@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CICD Pipeline
 
 on:
   push:
@@ -34,12 +34,6 @@ jobs:
       - name: Run static analysis
         run: go vet ./...
 
-      # - name: Run Semantic Release
-      #   id: semantic_release
-      #   run: npx semantic-release
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -53,7 +47,7 @@ jobs:
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          # TODO. use semver !!!!!
+          # TODO. use semver !
           tags: |
             type=raw,value=latest
             type=sha

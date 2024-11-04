@@ -1,48 +1,60 @@
-# challenge-cubbit
+# Cubbit Challenge
 
 [Read the Challenge](./DevOps-Cubbit-Task.pdf)
 
+## Key design decisions
 
-Per il provisioning delle VM  è stato scelto `Terraform` e  `Google Cloud` come provider. 
+- Infrastructure as Code: `Terraform`
+- Cloud Provider: `Google Cloud`
+- k3s installation: `Ansible`
 
-È stata inserita in maniera automatica la chiave rsa pubblica `cubbit.pub` su ognuna delle VM per un accesso `ssh` veloce, semplificato e sicuro.
-
-
-```sh
-docker run -p 8080:8080 ghcr.io/neiroc/hello-world-app
-```
 --- 
 
-## Come utilizzare questo progetto
+## How to use this project
 
-### Terraform - Provisioning VM
+### IaC - Terraform
 
-Per inizializzare terraform
+To provision the VM.
+
+From this directory root
+
+```bash
+cd terraform
+```
+
+Init 
 
 ```bash
 terraform init 
 ```
 
-Per applicare i manifest
+Apply
 
 ```bash
 terraform apply
 ```
 
-Per distruggere l'ambiente
+To destroy the environment
 
 ```bash
 terraform destroy
 ```
 
-## Ansible - Configure & Install k8s
+## Automation - Ansible
 
-- Inserire gli indirizzi IP pubblici nel file di inventario
+From this directory root
 
-- Inserire l'indirizzo pubblico del control plane in `ansible/playbooks/install.yaml` per generare un certificato con SAN aggiuntiva
+```bash
+cd ansible
+```
 
-`kubernetes_kubeadm_init_extra_opts: "--apiserver-cert-extra-sans=<cotrol_plane_public_ip>"`
+Insert the public IP of the VM in `inventory.yml`
 
+Ping VM
+
+```bash
+ansible all -i inventory.yml -u justanotherwop -m ping -v
+```
 
 1. Configure VM
 
@@ -52,11 +64,25 @@ This playbook will prepare the VM to be ready to install Kubernetes
 ansible-playbook -i hosts playbooks/configure.yaml -u justanotherwop 
 ```
 
-2. Install k8s
-
-This playbook will install Kubernetes with the `kubeadm` approach using this [role](https://github.com/geerlingguy/ansible-role-kubernetes)
+NOTE. (If necessary) Install the requirements with the following command:
 
 ```bash
-ansible-playbook -i hosts playbooks/install.yaml -u justanotherwop
+ansible-galaxy install -r requirements.yml 
 ```
+
+Run a check before running a playbook
+
+```bash
+ansible-playbook -i inventory.yml playbooks/site.yml --check
+```
+
+To run playbooks use the following command:
+
+```bash
+ansible-playbook -i inventory.yml playbooks/site.yml 
+```
+
+## Deploy 
+
+After installing the k3s cluster, to deploy the application, simply push a change to the github repository to start the CI/CD pipeline that will perform the update to the latest release
 
