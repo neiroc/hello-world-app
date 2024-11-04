@@ -8,7 +8,7 @@ import (
 
 func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
     secretValue := os.Getenv("API_KEY")
-    fmt.Fprintf(w, "Hello, World! Secret value is: %s", secretValue)
+    fmt.Fprintf(w, "Hello, World! Test 1. Secret value is: %s", secretValue)
 }
 
 func main() {

@@ -31,7 +31,7 @@ func TestHelloWorldHandler(t *testing.T) {
     }
 
     // Check the response body
-    expected := "Hello, World! Secret value is: test_secret_value"
+    expected := "Hello, World! Test 1. Secret value is: test_secret_value"
     if rr.Body.String() != expected {
         t.Errorf("Handler returned unexpected body: got %v want %v", rr.Body.String(), expected)
     }
